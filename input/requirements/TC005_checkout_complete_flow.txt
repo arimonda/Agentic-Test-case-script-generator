@@ -1,0 +1,64 @@
+==============================================================================
+TEST CASE: TC-005 — Complete Checkout Flow (End-to-End)
+==============================================================================
+Application  : SauceDemo E-Commerce Platform
+URL          : https://www.saucedemo.com
+Priority     : CRITICAL
+Module       : Checkout
+Preconditions: Browser open, no prior session
+
+OBJECTIVE:
+Verify the entire end-to-end purchase flow: Login → Browse → Add to Cart →
+Checkout Information → Checkout Overview → Order Confirmation.
+This is the most critical user journey in the application.
+
+TEST DATA:
+  Username   : standard_user
+  Password   : secret_sauce
+  First Name : John
+  Last Name  : Doe
+  Zip Code   : 10001
+
+STEPS:
+------------------------------------------------------------------------------
+Step | Action                                    | Input Data              | Expected Result
+------------------------------------------------------------------------------
+  1  | Navigate to the application               | https://www.saucedemo.com | Login page displayed with Swag Labs logo
+  2  | Enter username                            | standard_user           | Username field populated
+  3  | Enter password                            | secret_sauce            | Password field populated (masked)
+  4  | Click the Login button                    |                         | Redirected to Products page, "Products" heading visible
+  5  | Verify at least 6 products are displayed  |                         | 6 product cards visible on the page
+  6  | Click "Add to cart" on "Sauce Labs Backpack" |                      | Button changes to "Remove", cart badge shows "1"
+  7  | Click "Add to cart" on "Sauce Labs Bolt T-Shirt" |                  | Button changes to "Remove", cart badge shows "2"
+  8  | Take a screenshot of products page with items added |               | Screenshot shows 2 items marked as added
+  9  | Click the shopping cart icon              |                         | Cart page loads with 2 items listed
+ 10  | Verify "Sauce Labs Backpack" ($29.99) is in cart |                  | Backpack name and price visible
+ 11  | Verify "Sauce Labs Bolt T-Shirt" ($15.99) is in cart |              | T-Shirt name and price visible
+ 12  | Take a screenshot of the cart             |                         | Screenshot captured
+ 13  | Click the "Checkout" button               |                         | Checkout: Your Information page loads
+ 14  | Verify the checkout info form is displayed |                        | First Name, Last Name, and Zip Code fields are visible
+ 15  | Enter first name                          | John                    | First name field shows "John"
+ 16  | Enter last name                           | Doe                     | Last name field shows "Doe"
+ 17  | Enter zip/postal code                     | 10001                   | Zip code field shows "10001"
+ 18  | Take a screenshot of the filled form      |                         | Screenshot captured showing all 3 fields filled
+ 19  | Click the "Continue" button               |                         | Checkout: Overview page loads
+ 20  | Verify order summary displays both items  |                         | Both Backpack and Bolt T-Shirt listed
+ 21  | Verify "Payment Information" section exists|                         | Payment info section visible (e.g., "SauceCard #31337")
+ 22  | Verify "Shipping Information" section exists|                        | Shipping info visible (e.g., "Free Pony Express Delivery!")
+ 23  | Verify "Item total" shows $45.98          |                         | Item total = $29.99 + $15.99 = $45.98
+ 24  | Verify tax is calculated                  |                         | Tax amount is displayed (e.g., $3.68)
+ 25  | Verify "Total" is displayed               |                         | Total = Item total + Tax (e.g., $49.66)
+ 26  | Take a screenshot of checkout overview    |                         | Screenshot captured
+ 27  | Click the "Finish" button                 |                         | Checkout: Complete page loads
+ 28  | Verify "Thank you for your order!" message|                         | Thank you heading is visible
+ 29  | Verify order dispatch message displayed   |                         | "Your order has been dispatched" text visible
+ 30  | Verify the pony express image is shown    |                         | Confirmation image is loaded
+ 31  | Take a screenshot of confirmation page    |                         | Screenshot captured
+ 32  | Click "Back Home" button                  |                         | Returns to the Products page
+ 33  | Verify products page loaded after return  |                         | Products heading visible, 6 items displayed
+ 34  | Verify cart is empty after order           |                         | Cart badge is not visible (no items)
+
+POST-CONDITIONS:
+  - Order has been placed successfully
+  - Cart is cleared
+  - User is back on the Products page

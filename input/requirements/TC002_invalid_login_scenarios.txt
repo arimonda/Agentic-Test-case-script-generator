@@ -1,0 +1,78 @@
+==============================================================================
+TEST CASE: TC-002 — Invalid Login Scenarios
+==============================================================================
+Application  : SauceDemo E-Commerce Platform
+URL          : https://www.saucedemo.com
+Priority     : HIGH
+Module       : Authentication — Negative Testing
+Preconditions: Browser is open, no user is logged in
+
+OBJECTIVE:
+Verify the system handles invalid login attempts correctly by showing
+appropriate error messages and not granting access.
+
+==============================================================================
+SCENARIO 2A: Wrong Username
+==============================================================================
+TEST DATA:
+  Username : invalid_user_xyz
+  Password : secret_sauce
+
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to https://www.saucedemo.com     | https://www.saucedemo.com | Login page loads
+  2  | Enter an invalid username                 | invalid_user_xyz        | Username field shows "invalid_user_xyz"
+  3  | Enter the correct password                | secret_sauce            | Password field is populated
+  4  | Click the Login button                    |                         | Error message appears: "Epic sadface: Username and password do not match any user in this service"
+  5  | Verify the user remains on the login page |                         | URL is still https://www.saucedemo.com and login form is visible
+  6  | Verify the error icon appears on fields   |                         | Red error icons (X) appear on username and password fields
+
+==============================================================================
+SCENARIO 2B: Wrong Password
+==============================================================================
+TEST DATA:
+  Username : standard_user
+  Password : wrong_password_123
+
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to https://www.saucedemo.com     | https://www.saucedemo.com | Login page loads
+  2  | Enter a valid username                    | standard_user           | Username field populated
+  3  | Enter an incorrect password               | wrong_password_123      | Password field populated
+  4  | Click the Login button                    |                         | Error message: "Epic sadface: Username and password do not match any user in this service"
+  5  | Verify the user is NOT redirected         |                         | Still on login page
+
+==============================================================================
+SCENARIO 2C: Empty Credentials
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to https://www.saucedemo.com     | https://www.saucedemo.com | Login page loads
+  2  | Leave username field empty                |                         | Username field is empty
+  3  | Leave password field empty                |                         | Password field is empty
+  4  | Click the Login button                    |                         | Error message: "Epic sadface: Username is required"
+
+==============================================================================
+SCENARIO 2D: Empty Password Only
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to https://www.saucedemo.com     | https://www.saucedemo.com | Login page loads
+  2  | Enter a valid username                    | standard_user           | Username field populated
+  3  | Leave password field empty                |                         | Password field is empty
+  4  | Click the Login button                    |                         | Error message: "Epic sadface: Password is required"
+
+==============================================================================
+SCENARIO 2E: Locked Out User
+==============================================================================
+TEST DATA:
+  Username : locked_out_user
+  Password : secret_sauce
+
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to https://www.saucedemo.com     | https://www.saucedemo.com | Login page loads
+  2  | Enter locked out username                 | locked_out_user         | Username field populated
+  3  | Enter valid password                      | secret_sauce            | Password field populated
+  4  | Click the Login button                    |                         | Error message: "Epic sadface: Sorry, this user has been locked out."
+  5  | Verify the user cannot access the app     |                         | Still on login page, no redirect occurred

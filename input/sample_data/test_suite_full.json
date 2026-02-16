@@ -1,0 +1,187 @@
+{
+  "test_suite": {
+    "name": "SauceDemo Full Regression Suite",
+    "application": "SauceDemo E-Commerce Platform",
+    "base_url": "https://www.saucedemo.com",
+    "version": "1.0",
+    "created": "2026-02-16",
+    "description": "Comprehensive test suite covering login, product browsing, cart management, checkout, navigation, and edge cases"
+  },
+  "test_data": {
+    "valid_users": [
+      {"username": "standard_user", "password": "secret_sauce", "description": "Normal user with full access"},
+      {"username": "performance_glitch_user", "password": "secret_sauce", "description": "User with slow page loads"},
+      {"username": "error_user", "password": "secret_sauce", "description": "User that encounters random errors"},
+      {"username": "visual_user", "password": "secret_sauce", "description": "User with visual inconsistencies"}
+    ],
+    "invalid_users": [
+      {"username": "locked_out_user", "password": "secret_sauce", "description": "Locked account — cannot login"},
+      {"username": "invalid_user", "password": "secret_sauce", "description": "Non-existent username"},
+      {"username": "standard_user", "password": "wrong_password", "description": "Valid user, wrong password"},
+      {"username": "", "password": "", "description": "Empty credentials"},
+      {"username": "standard_user", "password": "", "description": "Missing password"},
+      {"username": "", "password": "secret_sauce", "description": "Missing username"}
+    ],
+    "checkout_info": [
+      {"first_name": "John", "last_name": "Doe", "zip": "10001", "description": "Valid US zip"},
+      {"first_name": "Jane", "last_name": "Smith", "zip": "90210", "description": "Beverly Hills zip"},
+      {"first_name": "Test", "last_name": "User", "zip": "SW1A 1AA", "description": "UK postcode"},
+      {"first_name": "", "last_name": "", "zip": "", "description": "All empty — should fail"},
+      {"first_name": "John", "last_name": "", "zip": "", "description": "Missing last name — should fail"},
+      {"first_name": "John", "last_name": "Doe", "zip": "", "description": "Missing zip — should fail"}
+    ],
+    "products": [
+      {"name": "Sauce Labs Backpack", "price": 29.99, "id": "sauce-labs-backpack"},
+      {"name": "Sauce Labs Bike Light", "price": 9.99, "id": "sauce-labs-bike-light"},
+      {"name": "Sauce Labs Bolt T-Shirt", "price": 15.99, "id": "sauce-labs-bolt-t-shirt"},
+      {"name": "Sauce Labs Fleece Jacket", "price": 49.99, "id": "sauce-labs-fleece-jacket"},
+      {"name": "Sauce Labs Onesie", "price": 7.99, "id": "sauce-labs-onesie"},
+      {"name": "Test.allTheThings() T-Shirt (Red)", "price": 15.99, "id": "test.allthethings()-t-shirt-(red)"}
+    ]
+  },
+  "test_cases": [
+    {
+      "id": "TC-001",
+      "name": "Valid User Login",
+      "priority": "HIGH",
+      "module": "Authentication",
+      "tags": ["smoke", "login", "critical-path"],
+      "preconditions": "Browser open, no active session",
+      "steps": [
+        {"step": 1, "action": "navigate", "data": "https://www.saucedemo.com", "expected": "Login page displayed"},
+        {"step": 2, "action": "fill", "target": "username field", "data": "standard_user", "expected": "Username entered"},
+        {"step": 3, "action": "fill", "target": "password field", "data": "secret_sauce", "expected": "Password entered"},
+        {"step": 4, "action": "click", "target": "Login button", "expected": "Redirected to Products page"},
+        {"step": 5, "action": "assert_visible", "target": "Products heading", "expected": "Products heading visible"},
+        {"step": 6, "action": "assert_visible", "target": "cart icon", "expected": "Cart icon present"}
+      ]
+    },
+    {
+      "id": "TC-002",
+      "name": "Invalid Login — Wrong Credentials",
+      "priority": "HIGH",
+      "module": "Authentication",
+      "tags": ["negative", "login", "validation"],
+      "preconditions": "Browser open, no active session",
+      "steps": [
+        {"step": 1, "action": "navigate", "data": "https://www.saucedemo.com", "expected": "Login page displayed"},
+        {"step": 2, "action": "fill", "target": "username field", "data": "invalid_user", "expected": "Username entered"},
+        {"step": 3, "action": "fill", "target": "password field", "data": "wrong_pass", "expected": "Password entered"},
+        {"step": 4, "action": "click", "target": "Login button", "expected": "Error message displayed"},
+        {"step": 5, "action": "assert_text", "target": "error message", "expected": "Username and password do not match"}
+      ]
+    },
+    {
+      "id": "TC-003",
+      "name": "Locked Out User Login",
+      "priority": "MEDIUM",
+      "module": "Authentication",
+      "tags": ["negative", "login"],
+      "preconditions": "Browser open",
+      "steps": [
+        {"step": 1, "action": "navigate", "data": "https://www.saucedemo.com", "expected": "Login page displayed"},
+        {"step": 2, "action": "fill", "target": "username field", "data": "locked_out_user", "expected": "Username entered"},
+        {"step": 3, "action": "fill", "target": "password field", "data": "secret_sauce", "expected": "Password entered"},
+        {"step": 4, "action": "click", "target": "Login button", "expected": "Locked out error displayed"},
+        {"step": 5, "action": "assert_text", "target": "error message", "expected": "this user has been locked out"}
+      ]
+    },
+    {
+      "id": "TC-004",
+      "name": "Add Single Item to Cart",
+      "priority": "HIGH",
+      "module": "Shopping Cart",
+      "tags": ["cart", "critical-path"],
+      "preconditions": "User logged in as standard_user",
+      "steps": [
+        {"step": 1, "action": "navigate", "data": "https://www.saucedemo.com", "expected": "Login page displayed"},
+        {"step": 2, "action": "fill", "target": "username field", "data": "standard_user", "expected": "Username entered"},
+        {"step": 3, "action": "fill", "target": "password field", "data": "secret_sauce", "expected": "Password entered"},
+        {"step": 4, "action": "click", "target": "Login button", "expected": "Products page loaded"},
+        {"step": 5, "action": "click", "target": "Add to cart button for Sauce Labs Backpack", "expected": "Button changes to Remove"},
+        {"step": 6, "action": "assert_text", "target": "cart badge", "expected": "1"},
+        {"step": 7, "action": "click", "target": "shopping cart icon", "expected": "Cart page opens"},
+        {"step": 8, "action": "assert_visible", "target": "Sauce Labs Backpack in cart", "expected": "Item visible in cart"}
+      ]
+    },
+    {
+      "id": "TC-005",
+      "name": "Complete Checkout Flow",
+      "priority": "CRITICAL",
+      "module": "Checkout",
+      "tags": ["e2e", "checkout", "critical-path"],
+      "preconditions": "Browser open",
+      "steps": [
+        {"step": 1, "action": "navigate", "data": "https://www.saucedemo.com", "expected": "Login page"},
+        {"step": 2, "action": "fill", "target": "username", "data": "standard_user", "expected": "Entered"},
+        {"step": 3, "action": "fill", "target": "password", "data": "secret_sauce", "expected": "Entered"},
+        {"step": 4, "action": "click", "target": "Login button", "expected": "Products page"},
+        {"step": 5, "action": "click", "target": "Add to cart for Backpack", "expected": "Added, badge=1"},
+        {"step": 6, "action": "click", "target": "Add to cart for Bike Light", "expected": "Added, badge=2"},
+        {"step": 7, "action": "click", "target": "cart icon", "expected": "Cart page with 2 items"},
+        {"step": 8, "action": "click", "target": "Checkout button", "expected": "Checkout info form"},
+        {"step": 9, "action": "fill", "target": "First Name field", "data": "John", "expected": "Name entered"},
+        {"step": 10, "action": "fill", "target": "Last Name field", "data": "Doe", "expected": "Name entered"},
+        {"step": 11, "action": "fill", "target": "Zip Code field", "data": "10001", "expected": "Zip entered"},
+        {"step": 12, "action": "click", "target": "Continue button", "expected": "Checkout overview page"},
+        {"step": 13, "action": "assert_visible", "target": "Item total", "expected": "Price total displayed"},
+        {"step": 14, "action": "click", "target": "Finish button", "expected": "Order confirmation"},
+        {"step": 15, "action": "assert_text", "target": "confirmation heading", "expected": "Thank you for your order"},
+        {"step": 16, "action": "click", "target": "Back Home button", "expected": "Products page"}
+      ]
+    },
+    {
+      "id": "TC-006",
+      "name": "Product Sorting — Price Low to High",
+      "priority": "MEDIUM",
+      "module": "Product Catalog",
+      "tags": ["sorting", "products"],
+      "preconditions": "User logged in",
+      "steps": [
+        {"step": 1, "action": "navigate", "data": "https://www.saucedemo.com", "expected": "Login page"},
+        {"step": 2, "action": "fill", "target": "username", "data": "standard_user", "expected": "Entered"},
+        {"step": 3, "action": "fill", "target": "password", "data": "secret_sauce", "expected": "Entered"},
+        {"step": 4, "action": "click", "target": "Login button", "expected": "Products page"},
+        {"step": 5, "action": "select", "target": "sort dropdown", "data": "lohi", "expected": "Products sorted by price ascending"},
+        {"step": 6, "action": "assert_text", "target": "first product name", "expected": "Sauce Labs Onesie"},
+        {"step": 7, "action": "assert_text", "target": "first product price", "expected": "$7.99"}
+      ]
+    },
+    {
+      "id": "TC-007",
+      "name": "Sidebar — Logout",
+      "priority": "MEDIUM",
+      "module": "Navigation",
+      "tags": ["navigation", "logout"],
+      "preconditions": "User logged in",
+      "steps": [
+        {"step": 1, "action": "navigate", "data": "https://www.saucedemo.com", "expected": "Login page"},
+        {"step": 2, "action": "fill", "target": "username", "data": "standard_user", "expected": "Entered"},
+        {"step": 3, "action": "fill", "target": "password", "data": "secret_sauce", "expected": "Entered"},
+        {"step": 4, "action": "click", "target": "Login button", "expected": "Products page"},
+        {"step": 5, "action": "click", "target": "hamburger menu icon", "expected": "Sidebar opens"},
+        {"step": 6, "action": "click", "target": "Logout link", "expected": "Logged out, login page displayed"},
+        {"step": 7, "action": "assert_visible", "target": "login button", "expected": "Login form visible"}
+      ]
+    },
+    {
+      "id": "TC-008",
+      "name": "Cart Persistence After Refresh",
+      "priority": "MEDIUM",
+      "module": "Shopping Cart",
+      "tags": ["cart", "persistence", "edge-case"],
+      "preconditions": "User logged in",
+      "steps": [
+        {"step": 1, "action": "navigate", "data": "https://www.saucedemo.com", "expected": "Login page"},
+        {"step": 2, "action": "fill", "target": "username", "data": "standard_user", "expected": "Entered"},
+        {"step": 3, "action": "fill", "target": "password", "data": "secret_sauce", "expected": "Entered"},
+        {"step": 4, "action": "click", "target": "Login button", "expected": "Products page"},
+        {"step": 5, "action": "click", "target": "Add to cart for Backpack", "expected": "Added, badge=1"},
+        {"step": 6, "action": "click", "target": "Add to cart for Onesie", "expected": "Added, badge=2"},
+        {"step": 7, "action": "navigate", "data": "https://www.saucedemo.com/inventory.html", "expected": "Page refreshed"},
+        {"step": 8, "action": "assert_text", "target": "cart badge", "expected": "2"},
+        {"step": 9, "action": "click", "target": "cart icon", "expected": "Cart shows both items"}
+      ]
+    }
+  ]
+}

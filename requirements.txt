@@ -1,0 +1,39 @@
+# =============================================================================
+# Self-Healing Autonomous Test Agent - Dependencies
+# =============================================================================
+
+# --- Core Automation ---
+playwright==1.49.1
+
+# --- AI Providers ---
+anthropic==0.42.0
+google-generativeai==0.8.4
+
+# --- Document Parsing ---
+python-docx==1.1.2
+openpyxl==3.1.5
+
+# --- Document Generation ---
+docx2pdf==0.1.8
+
+# --- RAG / Knowledge Base ---
+chromadb==0.5.23
+langchain==0.3.14
+langchain-community==0.3.14
+langchain-text-splitters==0.3.4
+
+# --- Image Processing ---
+Pillow==11.1.0
+
+# --- Configuration ---
+PyYAML==6.0.2
+python-dotenv==1.0.1
+pydantic==2.10.4
+
+# --- Reporting ---
+jinja2==3.1.5
+rich==13.9.4
+
+# --- Utilities ---
+aiofiles==24.1.0
+tenacity==9.0.0

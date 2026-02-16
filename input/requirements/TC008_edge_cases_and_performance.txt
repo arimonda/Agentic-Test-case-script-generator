@@ -1,0 +1,84 @@
+==============================================================================
+TEST CASE: TC-008 — Edge Cases, Boundary Tests & Special Users
+==============================================================================
+Application  : SauceDemo E-Commerce Platform
+URL          : https://www.saucedemo.com
+Priority     : MEDIUM
+Module       : Cross-Cutting Concerns
+Preconditions: Browser is open
+
+OBJECTIVE:
+Test edge cases including special user accounts, boundary conditions,
+page refresh behavior, and direct URL access.
+
+==============================================================================
+SCENARIO 8A: Performance Glitch User
+==============================================================================
+TEST DATA:
+  Username : performance_glitch_user
+  Password : secret_sauce
+
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to https://www.saucedemo.com     | https://www.saucedemo.com | Login page loads
+  2  | Enter username                            | performance_glitch_user | Username entered
+  3  | Enter password                            | secret_sauce            | Password entered
+  4  | Click Login button                        |                         | Products page loads (may be slow — up to 5 seconds delay)
+  5  | Verify products eventually display        |                         | All 6 products visible (even if delayed)
+  6  | Click "Add to cart" on any product        |                         | Item added to cart (may have delay)
+  7  | Click cart icon                           |                         | Cart page loads with item
+
+==============================================================================
+SCENARIO 8B: Error User — Random Failures
+==============================================================================
+TEST DATA:
+  Username : error_user
+  Password : secret_sauce
+
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login with error_user                     | error_user / secret_sauce | Products page loads
+  2  | Add "Sauce Labs Backpack" to cart         |                         | Item may or may not add successfully (known error user)
+  3  | Click cart icon                           |                         | Cart page loads
+  4  | Attempt checkout if item was added        |                         | Checkout may produce errors — self-healing should handle retries
+  5  | Document any errors encountered           |                         | Errors are captured in the execution report
+
+==============================================================================
+SCENARIO 8C: Direct URL Access Without Login
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate directly to inventory page       | https://www.saucedemo.com/inventory.html | Error message: "You can only access '/inventory.html' when you are logged in."
+  2  | Navigate directly to cart page            | https://www.saucedemo.com/cart.html | Error message about requiring login
+  3  | Navigate directly to checkout             | https://www.saucedemo.com/checkout-step-one.html | Error about requiring login
+  4  | Verify all direct URLs redirect/error     |                         | None of the above pages are accessible without authentication
+
+==============================================================================
+SCENARIO 8D: Page Refresh During Flow
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login with standard_user                  | standard_user / secret_sauce | Products page loaded
+  2  | Add 2 items to cart                       |                         | Cart badge shows "2"
+  3  | Refresh the browser page (F5)             |                         | Products page reloads
+  4  | Verify cart badge still shows "2"         |                         | Cart state persisted through refresh
+  5  | Click cart icon                           |                         | Both items still in cart
+  6  | Navigate to checkout info page            |                         | Checkout form displayed
+  7  | Fill in first name only                   | John                    | First name entered
+  8  | Refresh the browser page (F5)             |                         | Checkout page reloads
+  9  | Verify form fields are cleared            |                         | All fields are empty after refresh (expected behavior)
+
+==============================================================================
+SCENARIO 8E: Add All Products to Cart
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login with standard_user                  | standard_user / secret_sauce | Products page loaded
+  2  | Click "Add to cart" on ALL 6 products     |                         | All 6 buttons change to "Remove"
+  3  | Verify cart badge shows "6"               |                         | Cart badge displays "6"
+  4  | Click cart icon                           |                         | Cart page shows all 6 items
+  5  | Verify all 6 products listed with correct prices |                  | All items and prices match the catalog
+  6  | Take a screenshot of the full cart        |                         | Screenshot captured
+  7  | Proceed to checkout, fill info, continue  | Jane / Smith / 90210    | Checkout overview shows all 6 items
+  8  | Verify total price calculation            |                         | Item total = $29.99 + $9.99 + $15.99 + $49.99 + $7.99 + $15.99 = $129.94
+  9  | Click Finish                              |                         | Order confirmation page displayed

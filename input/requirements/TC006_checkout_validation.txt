@@ -1,0 +1,61 @@
+==============================================================================
+TEST CASE: TC-006 — Checkout Form Validation
+==============================================================================
+Application  : SauceDemo E-Commerce Platform
+URL          : https://www.saucedemo.com
+Priority     : HIGH
+Module       : Checkout — Input Validation
+Preconditions: User logged in, at least 1 item in cart
+
+OBJECTIVE:
+Verify that the checkout information form properly validates required
+fields and displays appropriate error messages.
+
+TEST DATA:
+  Login: standard_user / secret_sauce
+
+==============================================================================
+SCENARIO 6A: All Fields Empty
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login with standard_user                  | standard_user / secret_sauce | Products page loaded
+  2  | Add any item to cart                      |                         | Cart badge shows "1"
+  3  | Click cart icon                           |                         | Cart page opens
+  4  | Click "Checkout"                          |                         | Checkout info form displayed
+  5  | Leave all fields empty                    |                         | All 3 fields are blank
+  6  | Click "Continue"                          |                         | Error: "Error: First Name is required"
+  7  | Verify user stays on the info page        |                         | Still on checkout-step-one page
+  8  | Take screenshot of the error              |                         | Screenshot captured
+
+==============================================================================
+SCENARIO 6B: Missing Last Name
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to checkout info (with item in cart) |                     | Checkout info form displayed
+  2  | Enter first name only                     | John                    | First name field populated
+  3  | Leave last name empty                     |                         | Last name field is empty
+  4  | Leave zip code empty                      |                         | Zip code field is empty
+  5  | Click "Continue"                          |                         | Error: "Error: Last Name is required"
+
+==============================================================================
+SCENARIO 6C: Missing Zip Code
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to checkout info (with item in cart) |                     | Checkout info form displayed
+  2  | Enter first name                          | John                    | First name populated
+  3  | Enter last name                           | Doe                     | Last name populated
+  4  | Leave zip code empty                      |                         | Zip code is empty
+  5  | Click "Continue"                          |                         | Error: "Error: Postal Code is required"
+
+==============================================================================
+SCENARIO 6D: Cancel Checkout
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to checkout info (with item in cart) |                     | Checkout info form displayed
+  2  | Click "Cancel" button                     |                         | Returns to cart page
+  3  | Verify items are still in cart            |                         | Previously added items are still listed
+  4  | Verify cart badge count unchanged         |                         | Badge count is the same as before

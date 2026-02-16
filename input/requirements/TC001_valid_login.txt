@@ -1,0 +1,34 @@
+==============================================================================
+TEST CASE: TC-001 — Valid User Login
+==============================================================================
+Application  : SauceDemo E-Commerce Platform
+URL          : https://www.saucedemo.com
+Priority     : HIGH
+Module       : Authentication
+Preconditions: Browser is open, no user is logged in
+
+OBJECTIVE:
+Verify that a user with valid credentials (standard_user) can successfully
+log in and is redirected to the Products inventory page.
+
+TEST DATA:
+  Username : standard_user
+  Password : secret_sauce
+
+STEPS:
+------------------------------------------------------------------------------
+Step | Action                                    | Input Data              | Expected Result
+------------------------------------------------------------------------------
+  1  | Navigate to the application URL           | https://www.saucedemo.com | Login page loads. Username field, password field, and Login button are visible.
+  2  | Verify the page title                     |                         | Page title contains "Swag Labs"
+  3  | Verify the login form elements are present |                         | Username input (id: user-name), Password input (id: password), and Login button (id: login-button) are all visible
+  4  | Enter the username into the username field | standard_user           | Username field displays "standard_user"
+  5  | Enter the password into the password field | secret_sauce            | Password field shows masked characters (dots/asterisks)
+  6  | Click the Login button                    |                         | User is redirected to the inventory/products page (URL contains "inventory")
+  7  | Verify the products page loaded           |                         | Page displays "Products" heading and at least 1 product item is visible
+  8  | Verify the shopping cart icon is present   |                         | Cart icon is visible in the top-right header area
+  9  | Take a screenshot of the products page    |                         | Screenshot captured successfully
+
+POST-CONDITIONS:
+  - User is logged in as standard_user
+  - Products page is displayed with all inventory items

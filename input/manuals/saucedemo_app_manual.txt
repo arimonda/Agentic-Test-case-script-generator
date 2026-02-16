@@ -1,0 +1,386 @@
+==============================================================================
+SAUCEDEMO APPLICATION — COMPLETE REFERENCE MANUAL
+==============================================================================
+Version: 1.0
+URL: https://www.saucedemo.com
+Type: E-Commerce Demo Application by Sauce Labs
+
+This document provides full technical and functional reference for
+the SauceDemo application. It is used as a knowledge base (RAG) by
+the Self-Healing Autonomous Test Agent to understand page structures,
+element IDs, navigation flows, and expected behavior.
+
+==============================================================================
+1. APPLICATION OVERVIEW
+==============================================================================
+
+SauceDemo is a fictional e-commerce web application built to practice
+automated testing. It simulates an online store where users can:
+  - Log in with different test user accounts
+  - Browse a product catalog
+  - Sort products by name or price
+  - Add/remove items from a shopping cart
+  - Complete a checkout flow
+  - Log out via a sidebar navigation menu
+
+The application is a single-page React application with multiple "pages"
+rendered via client-side routing.
+
+==============================================================================
+2. LOGIN PAGE
+==============================================================================
+
+URL: https://www.saucedemo.com
+      https://www.saucedemo.com/index.html
+
+Page Layout:
+  - Swag Labs logo at the top
+  - Login form in the center containing:
+    * Username text input
+    * Password text input
+    * LOGIN button
+  - Below the form: a list of accepted usernames and the shared password
+
+Key Element Locators:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ Element          │ ID/Selector                    │ Type        │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ Username field   │ id="user-name"                 │ <input>     │
+  │ Password field   │ id="password"                  │ <input>     │
+  │ Login button     │ id="login-button"              │ <input>     │
+  │ Error container  │ class="error-message-container" │ <div>      │
+  │ Error text       │ data-test="error"              │ <h3>        │
+  │ Error X button   │ class="error-button"           │ <button>    │
+  └─────────────────────────────────────────────────────────────────┘
+
+Test User Accounts:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ Username                  │ Password     │ Behavior             │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ standard_user             │ secret_sauce │ Normal full access    │
+  │ locked_out_user           │ secret_sauce │ Login blocked         │
+  │ problem_user              │ secret_sauce │ Broken product images │
+  │ performance_glitch_user   │ secret_sauce │ Slow page loads       │
+  │ error_user                │ secret_sauce │ Random JS errors      │
+  │ visual_user               │ secret_sauce │ Visual inconsistencies│
+  └─────────────────────────────────────────────────────────────────┘
+
+Error Messages:
+  - Empty username: "Epic sadface: Username is required"
+  - Empty password: "Epic sadface: Password is required"
+  - Wrong credentials: "Epic sadface: Username and password do not match any user in this service"
+  - Locked out: "Epic sadface: Sorry, this user has been locked out."
+
+==============================================================================
+3. PRODUCTS / INVENTORY PAGE
+==============================================================================
+
+URL: https://www.saucedemo.com/inventory.html
+
+This is the main product catalog page, shown after successful login.
+
+Page Layout:
+  - Top header bar:
+    * Hamburger menu button (top-left)
+    * "Swag Labs" title (center)
+    * Shopping cart icon with badge (top-right)
+  - Secondary header:
+    * "Products" page title
+    * Sort dropdown (top-right of product area)
+  - Product grid:
+    * 6 product cards in a 2-column layout
+    * Each card: image, name (link), description, price, add/remove button
+
+Key Element Locators:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ Element              │ Selector                         │ Type  │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ Hamburger menu       │ id="react-burger-menu-btn"       │ btn   │
+  │ Page title           │ class="title"                    │ span  │
+  │ Cart icon            │ class="shopping_cart_link"        │ a     │
+  │ Cart badge           │ class="shopping_cart_badge"       │ span  │
+  │ Sort dropdown        │ class="product_sort_container"    │ select│
+  │ Product container    │ class="inventory_list"            │ div   │
+  │ Product card         │ class="inventory_item"            │ div   │
+  │ Product image        │ class="inventory_item_img"        │ div   │
+  │ Product name         │ class="inventory_item_name"       │ div   │
+  │ Product description  │ class="inventory_item_desc"       │ div   │
+  │ Product price        │ class="inventory_item_price"      │ div   │
+  │ Add to cart (each)   │ id="add-to-cart-<product-slug>"   │ btn   │
+  │ Remove (each)        │ id="remove-<product-slug>"        │ btn   │
+  └─────────────────────────────────────────────────────────────────┘
+
+Add to Cart Button IDs (specific):
+  - add-to-cart-sauce-labs-backpack
+  - add-to-cart-sauce-labs-bike-light
+  - add-to-cart-sauce-labs-bolt-t-shirt
+  - add-to-cart-sauce-labs-fleece-jacket
+  - add-to-cart-sauce-labs-onesie
+  - add-to-cart-test.allthethings()-t-shirt-(red)
+
+Remove Button IDs (after adding):
+  - remove-sauce-labs-backpack
+  - remove-sauce-labs-bike-light
+  - remove-sauce-labs-bolt-t-shirt
+  - remove-sauce-labs-fleece-jacket
+  - remove-sauce-labs-onesie
+  - remove-test.allthethings()-t-shirt-(red)
+
+Sort Options (value attribute):
+  - "az"   → Name (A to Z) — default
+  - "za"   → Name (Z to A)
+  - "lohi" → Price (low to high)
+  - "hilo" → Price (high to low)
+
+Product Catalog:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ #  │ Name                                │ Price   │ Slug       │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ 1  │ Sauce Labs Backpack                 │ $29.99  │ sauce-labs-backpack │
+  │ 2  │ Sauce Labs Bike Light               │ $9.99   │ sauce-labs-bike-light │
+  │ 3  │ Sauce Labs Bolt T-Shirt             │ $15.99  │ sauce-labs-bolt-t-shirt │
+  │ 4  │ Sauce Labs Fleece Jacket            │ $49.99  │ sauce-labs-fleece-jacket │
+  │ 5  │ Sauce Labs Onesie                   │ $7.99   │ sauce-labs-onesie │
+  │ 6  │ Test.allTheThings() T-Shirt (Red)   │ $15.99  │ test.allthethings()-t-shirt-(red) │
+  └─────────────────────────────────────────────────────────────────┘
+
+==============================================================================
+4. PRODUCT DETAIL PAGE
+==============================================================================
+
+URL: https://www.saucedemo.com/inventory-item.html?id=<item_id>
+
+Product IDs: 0, 1, 2, 3, 4, 5
+
+Page Layout:
+  - Back to products button (top-left)
+  - Large product image (left)
+  - Product info (right):
+    * Product name
+    * Product description
+    * Product price
+    * Add to cart / Remove button
+
+Key Element Locators:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ Element              │ Selector                         │ Type  │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ Back button          │ id="back-to-products"            │ btn   │
+  │ Product name         │ class="inventory_details_name"    │ div   │
+  │ Product description  │ class="inventory_details_desc"    │ div   │
+  │ Product price        │ class="inventory_details_price"   │ div   │
+  │ Product image        │ class="inventory_details_img"     │ img   │
+  │ Add to cart          │ id="add-to-cart"                  │ btn   │
+  │ Remove               │ id="remove"                       │ btn   │
+  └─────────────────────────────────────────────────────────────────┘
+
+==============================================================================
+5. SHOPPING CART PAGE
+==============================================================================
+
+URL: https://www.saucedemo.com/cart.html
+
+Page Layout:
+  - Header with hamburger menu and cart icon
+  - "Your Cart" page title
+  - Cart items list:
+    * Each item: quantity, name (link), description, price, Remove button
+  - Footer buttons:
+    * "Continue Shopping" — returns to inventory
+    * "Checkout" — proceeds to checkout step one
+
+Key Element Locators:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ Element              │ Selector                         │ Type  │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ Page title           │ class="title"                    │ span  │
+  │ Cart item            │ class="cart_item"                │ div   │
+  │ Item quantity        │ class="cart_quantity"            │ div   │
+  │ Item name            │ class="inventory_item_name"      │ a     │
+  │ Item description     │ class="inventory_item_desc"      │ div   │
+  │ Item price           │ class="inventory_item_price"     │ div   │
+  │ Remove button        │ id="remove-<product-slug>"       │ btn   │
+  │ Continue Shopping    │ id="continue-shopping"           │ btn   │
+  │ Checkout button      │ id="checkout"                    │ btn   │
+  └─────────────────────────────────────────────────────────────────┘
+
+==============================================================================
+6. CHECKOUT: YOUR INFORMATION (Step 1)
+==============================================================================
+
+URL: https://www.saucedemo.com/checkout-step-one.html
+
+Page Layout:
+  - "Checkout: Your Information" title
+  - Form with 3 input fields:
+    * First Name
+    * Last Name
+    * Zip/Postal Code
+  - Footer buttons:
+    * "Cancel" — returns to cart
+    * "Continue" — proceeds to checkout overview
+
+Key Element Locators:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ Element              │ Selector                         │ Type  │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ First Name field     │ id="first-name"                  │ input │
+  │ Last Name field      │ id="last-name"                   │ input │
+  │ Zip Code field       │ id="postal-code"                 │ input │
+  │ Cancel button        │ id="cancel"                      │ btn   │
+  │ Continue button      │ id="continue"                    │ input │
+  │ Error container      │ class="error-message-container"  │ div   │
+  │ Error text           │ data-test="error"                │ h3    │
+  └─────────────────────────────────────────────────────────────────┘
+
+Validation Error Messages:
+  - Empty first name: "Error: First Name is required"
+  - Empty last name: "Error: Last Name is required"
+  - Empty zip code: "Error: Postal Code is required"
+
+==============================================================================
+7. CHECKOUT: OVERVIEW (Step 2)
+==============================================================================
+
+URL: https://www.saucedemo.com/checkout-step-two.html
+
+Page Layout:
+  - "Checkout: Overview" title
+  - Cart items summary (same layout as cart page)
+  - Summary info:
+    * Payment Information: "SauceCard #31337"
+    * Shipping Information: "Free Pony Express Delivery!"
+    * Price Total section:
+      - Item total
+      - Tax
+      - Total
+  - Footer buttons:
+    * "Cancel" — returns to inventory
+    * "Finish" — completes order
+
+Key Element Locators:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ Element              │ Selector                         │ Type  │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ Page title           │ class="title"                    │ span  │
+  │ Cart items           │ class="cart_item"                │ div   │
+  │ Summary info         │ class="summary_info"             │ div   │
+  │ Payment label        │ data-test="payment-info-label"   │ div   │
+  │ Payment value        │ data-test="payment-info-value"   │ div   │
+  │ Shipping label       │ data-test="shipping-info-label"  │ div   │
+  │ Shipping value       │ data-test="shipping-info-value"  │ div   │
+  │ Subtotal label       │ class="summary_subtotal_label"   │ div   │
+  │ Tax label            │ class="summary_tax_label"        │ div   │
+  │ Total label          │ class="summary_total_label"      │ div   │
+  │ Cancel button        │ id="cancel"                      │ btn   │
+  │ Finish button        │ id="finish"                      │ btn   │
+  └─────────────────────────────────────────────────────────────────┘
+
+Tax Calculation: 8% of subtotal (rounded to 2 decimal places)
+
+==============================================================================
+8. CHECKOUT: COMPLETE (Step 3)
+==============================================================================
+
+URL: https://www.saucedemo.com/checkout-complete.html
+
+Page Layout:
+  - "Checkout: Complete!" title
+  - Success icon/image (pony express)
+  - "Thank you for your order!" heading
+  - "Your order has been dispatched, and will arrive just as fast as
+     the pony can get there!" body text
+  - "Back Home" button — returns to inventory
+
+Key Element Locators:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ Element              │ Selector                         │ Type  │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ Page title           │ class="title"                    │ span  │
+  │ Complete header      │ class="complete-header"          │ h2    │
+  │ Complete text        │ class="complete-text"            │ div   │
+  │ Pony image           │ class="pony_express"             │ img   │
+  │ Back Home button     │ id="back-to-products"            │ btn   │
+  └─────────────────────────────────────────────────────────────────┘
+
+==============================================================================
+9. SIDEBAR NAVIGATION MENU
+==============================================================================
+
+The sidebar is a slide-out menu accessible from any page after login.
+
+Trigger: Click hamburger icon (id="react-burger-menu-btn")
+
+Menu Items:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ Menu Item        │ ID                          │ Behavior        │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ All Items        │ id="inventory_sidebar_link" │ → Inventory page│
+  │ About            │ id="about_sidebar_link"     │ → saucelabs.com │
+  │ Logout           │ id="logout_sidebar_link"    │ → Login page    │
+  │ Reset App State  │ id="reset_sidebar_link"     │ Clears cart     │
+  └─────────────────────────────────────────────────────────────────┘
+
+Close button: id="react-burger-cross-btn"
+Menu container: class="bm-menu"
+
+==============================================================================
+10. FOOTER
+==============================================================================
+
+Visible on all pages after login.
+
+Elements:
+  - Twitter link
+  - Facebook link
+  - LinkedIn link
+  - Footer text: "© 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy"
+
+==============================================================================
+11. COMMON CSS CLASSES & DATA ATTRIBUTES
+==============================================================================
+
+Data-test attributes (useful for test automation):
+  - data-test="username"           → Login username input
+  - data-test="password"           → Login password input
+  - data-test="login-button"       → Login submit button
+  - data-test="error"              → Error message text
+  - data-test="inventory-item"     → Each product card
+  - data-test="inventory-item-name" → Product name in card
+  - data-test="inventory-item-desc" → Product description
+  - data-test="inventory-item-price" → Product price
+  - data-test="shopping-cart-link" → Cart icon
+  - data-test="shopping-cart-badge" → Cart count badge
+  - data-test="product-sort-container" → Sort dropdown
+
+==============================================================================
+12. NAVIGATION FLOW DIAGRAM
+==============================================================================
+
+  [Login Page]
+       │
+       ▼ (valid credentials)
+  [Products / Inventory Page]
+       │          │           │
+       │          ▼           ▼
+       │  [Product Detail]  [Sidebar Menu]
+       │          │           │ │ │ │
+       │          └──back──→  │ │ │ │
+       │                      │ │ │ └──→ [Reset App State]
+       │                      │ │ └────→ [About → saucelabs.com]
+       │                      │ └──────→ [All Items → Inventory]
+       │                      └────────→ [Logout → Login Page]
+       ▼
+  [Shopping Cart]
+       │         │
+       │         └──continue shopping──→ [Products]
+       ▼
+  [Checkout: Info] ──cancel──→ [Cart]
+       │
+       ▼
+  [Checkout: Overview] ──cancel──→ [Products]
+       │
+       ▼
+  [Checkout: Complete]
+       │
+       └──back home──→ [Products]

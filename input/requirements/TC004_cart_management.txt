@@ -1,0 +1,78 @@
+==============================================================================
+TEST CASE: TC-004 — Shopping Cart Management
+==============================================================================
+Application  : SauceDemo E-Commerce Platform
+URL          : https://www.saucedemo.com
+Priority     : HIGH
+Module       : Shopping Cart
+Preconditions: User is logged in as standard_user
+
+OBJECTIVE:
+Verify the full shopping cart lifecycle — adding items, viewing cart,
+removing items, and verifying cart badge count accuracy.
+
+==============================================================================
+SCENARIO 4A: Add Single Item to Cart
+==============================================================================
+TEST DATA:
+  Login: standard_user / secret_sauce
+
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to https://www.saucedemo.com     | https://www.saucedemo.com | Login page loads
+  2  | Enter username                            | standard_user           | Username entered
+  3  | Enter password                            | secret_sauce            | Password entered
+  4  | Click Login                               |                         | Products page loads
+  5  | Click "Add to cart" on Sauce Labs Backpack |                        | Button text changes to "Remove"
+  6  | Verify the cart badge shows "1"           |                         | Cart icon badge displays "1"
+  7  | Click the cart icon in the header         |                         | Cart page opens showing 1 item
+  8  | Verify "Sauce Labs Backpack" is in cart   |                         | Item name, description, and price ($29.99) are visible
+  9  | Verify item quantity is 1                 |                         | Quantity shows "1"
+ 10  | Take a screenshot of the cart             |                         | Screenshot captured
+
+==============================================================================
+SCENARIO 4B: Add Multiple Items to Cart
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login with standard_user                  | standard_user / secret_sauce | Products page loads
+  2  | Click "Add to cart" on Sauce Labs Backpack |                        | Button changes to "Remove", cart badge shows "1"
+  3  | Click "Add to cart" on Sauce Labs Bike Light |                      | Button changes to "Remove", cart badge shows "2"
+  4  | Click "Add to cart" on Sauce Labs Onesie  |                         | Button changes to "Remove", cart badge shows "3"
+  5  | Click the cart icon                       |                         | Cart page opens
+  6  | Verify 3 items are listed in the cart     |                         | Sauce Labs Backpack, Bike Light, and Onesie all visible
+  7  | Verify total item count matches badge     |                         | Cart badge shows "3" and 3 items listed
+
+==============================================================================
+SCENARIO 4C: Remove Item from Cart
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login and add Backpack and Bike Light     | standard_user / secret_sauce | 2 items in cart
+  2  | Click the cart icon                       |                         | Cart page shows 2 items
+  3  | Click "Remove" next to Sauce Labs Backpack|                         | Backpack is removed from cart list
+  4  | Verify only Bike Light remains            |                         | Only "Sauce Labs Bike Light" is listed
+  5  | Verify cart badge shows "1"               |                         | Badge updated to "1"
+  6  | Click "Remove" next to Bike Light         |                         | Bike Light removed
+  7  | Verify cart is empty                      |                         | No items listed, cart badge disappears
+
+==============================================================================
+SCENARIO 4D: Remove Item from Product Page
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login and navigate to products            | standard_user / secret_sauce | Products page loaded
+  2  | Click "Add to cart" on Sauce Labs Backpack|                         | Button changes to "Remove", badge shows "1"
+  3  | Click "Remove" on Sauce Labs Backpack     |                         | Button changes back to "Add to cart"
+  4  | Verify cart badge disappears              |                         | No cart badge visible (0 items)
+
+==============================================================================
+SCENARIO 4E: Continue Shopping from Cart
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login and add an item to cart             | standard_user / secret_sauce | 1 item in cart
+  2  | Click the cart icon                       |                         | Cart page opens
+  3  | Click "Continue Shopping" button          |                         | Returns to the products/inventory page
+  4  | Verify all products are displayed         |                         | 6 products visible
+  5  | Verify the previously added item shows "Remove" |                   | The item's button shows "Remove" (not "Add to cart")

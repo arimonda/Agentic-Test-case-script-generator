@@ -1,0 +1,75 @@
+# =============================================================================
+# Self-Healing Autonomous Test Agent - Configuration
+# =============================================================================
+
+# --- AI Provider Selection ---
+# Options: GEMINI, CLAUDE
+# GEMINI  -> Fast multimodal analysis (screenshot + DOM)
+# CLAUDE  -> Deep reasoning, complex planning & code generation
+ai_provider: "GEMINI"
+
+# --- API Keys (override via .env for security) ---
+api_keys:
+  gemini: "${GEMINI_API_KEY}"
+  claude: "${CLAUDE_API_KEY}"
+
+# --- Model Configuration ---
+models:
+  gemini:
+    vision_model: "gemini-2.5-flash"
+    text_model: "gemini-2.5-flash"
+    max_tokens: 4096
+    temperature: 0.2
+  claude:
+    vision_model: "claude-sonnet-4-20250514"
+    text_model: "claude-sonnet-4-20250514"
+    max_tokens: 4096
+    temperature: 0.2
+
+# --- Playwright Settings ---
+playwright:
+  headless: false
+  browser: "chromium"            # chromium, firefox, webkit
+  screenshot_type: "full_page"   # full_page, viewport
+  viewport:
+    width: 1920
+    height: 1080
+  timeout: 30000                 # ms
+  navigation_timeout: 60000     # ms
+  retries: 3                    # Self-healing retry attempts
+  slow_mo: 100                  # ms between actions for visibility
+
+# --- Self-Healing Configuration ---
+self_healing:
+  enabled: true
+  max_retries: 3
+  locator_strategies:
+    - "test_id"       # data-testid attributes
+    - "id"            # HTML id
+    - "aria"          # ARIA labels/roles
+    - "css"           # CSS selectors
+    - "xpath"         # XPath expressions
+    - "visual"        # Visual relative positioning
+
+# --- Artifact Generation ---
+artifacts:
+  output_dir: "output"
+  generate_script: true
+  generate_docx: true
+  generate_report: true
+  screenshot_in_docx: true
+  report_format: "html"         # html, json
+
+# --- RAG / Knowledge Base ---
+rag:
+  enabled: true
+  chunk_size: 1000
+  chunk_overlap: 200
+  embedding_model: "text-embedding-3-small"
+  vector_store: "local"         # local (ChromaDB)
+
+# --- Logging ---
+logging:
+  level: "INFO"                 # DEBUG, INFO, WARNING, ERROR
+  file: "output/agent.log"
+  console: true

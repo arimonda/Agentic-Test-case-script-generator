@@ -1,0 +1,65 @@
+==============================================================================
+TEST CASE: TC-007 — Sidebar Menu Navigation
+==============================================================================
+Application  : SauceDemo E-Commerce Platform
+URL          : https://www.saucedemo.com
+Priority     : MEDIUM
+Module       : Navigation
+Preconditions: User is logged in as standard_user
+
+OBJECTIVE:
+Verify that the hamburger sidebar menu works correctly, including
+all menu items and the logout functionality.
+
+TEST DATA:
+  Login: standard_user / secret_sauce
+
+==============================================================================
+SCENARIO 7A: Open and Close Sidebar
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login with standard_user                  | standard_user / secret_sauce | Products page loaded
+  2  | Click the hamburger menu icon (top-left)  |                         | Sidebar menu slides open from the left
+  3  | Verify "All Items" menu option visible    |                         | "All Items" link is displayed
+  4  | Verify "About" menu option visible        |                         | "About" link is displayed
+  5  | Verify "Logout" menu option visible       |                         | "Logout" link is displayed
+  6  | Verify "Reset App State" option visible   |                         | "Reset App State" link is displayed
+  7  | Take screenshot of open sidebar           |                         | Screenshot captured
+  8  | Click the X (close) button on sidebar     |                         | Sidebar slides closed
+  9  | Verify sidebar is no longer visible       |                         | Menu overlay is hidden
+
+==============================================================================
+SCENARIO 7B: Navigate via "All Items"
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login and go to a product detail page     | standard_user / secret_sauce | Product detail page displayed
+  2  | Open the hamburger menu                   |                         | Sidebar opens
+  3  | Click "All Items"                         |                         | Navigates back to the products/inventory page
+  4  | Verify products page loaded               |                         | "Products" heading visible, 6 items displayed
+
+==============================================================================
+SCENARIO 7C: Logout
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login with standard_user                  | standard_user / secret_sauce | Products page loaded
+  2  | Open the hamburger menu                   |                         | Sidebar opens
+  3  | Click "Logout"                            |                         | User is logged out
+  4  | Verify login page is displayed            |                         | Username and password fields visible, URL is saucedemo.com
+  5  | Verify user cannot access inventory page  |                         | Navigating to /inventory.html redirects back to login or shows error
+
+==============================================================================
+SCENARIO 7D: Reset App State
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login with standard_user                  | standard_user / secret_sauce | Products page loaded
+  2  | Add "Sauce Labs Backpack" to cart         |                         | Cart badge shows "1"
+  3  | Add "Sauce Labs Bike Light" to cart       |                         | Cart badge shows "2"
+  4  | Open the hamburger menu                   |                         | Sidebar opens
+  5  | Click "Reset App State"                   |                         | App state is reset
+  6  | Close the sidebar                         |                         | Sidebar closes
+  7  | Verify cart badge is gone                 |                         | No cart badge visible (cart cleared)
+  8  | Verify "Add to cart" buttons are restored |                         | Both items show "Add to cart" (not "Remove")

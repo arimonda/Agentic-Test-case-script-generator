@@ -1,0 +1,77 @@
+==============================================================================
+TEST CASE: TC-003 — Product Browsing and Sorting
+==============================================================================
+Application  : SauceDemo E-Commerce Platform
+URL          : https://www.saucedemo.com
+Priority     : HIGH
+Module       : Product Catalog
+Preconditions: User is logged in as standard_user on the Products page
+
+OBJECTIVE:
+Verify that products are displayed correctly and can be sorted using
+the sort dropdown. Also verify product detail navigation works.
+
+==============================================================================
+SCENARIO 3A: Verify Product Catalog Display
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Navigate to https://www.saucedemo.com     | https://www.saucedemo.com | Login page loads
+  2  | Login with valid credentials              | standard_user / secret_sauce | Products page loads
+  3  | Verify all 6 products are displayed       |                         | Exactly 6 product cards are visible on the page
+  4  | Verify "Sauce Labs Backpack" is listed     |                         | Product name "Sauce Labs Backpack" is visible with price $29.99
+  5  | Verify "Sauce Labs Bike Light" is listed   |                         | Product name "Sauce Labs Bike Light" is visible with price $9.99
+  6  | Verify "Sauce Labs Bolt T-Shirt" is listed |                         | Product name "Sauce Labs Bolt T-Shirt" is visible with price $15.99
+  7  | Verify "Sauce Labs Fleece Jacket" is listed|                         | Product name "Sauce Labs Fleece Jacket" is visible with price $49.99
+  8  | Verify "Sauce Labs Onesie" is listed       |                         | Product name "Sauce Labs Onesie" is visible with price $7.99
+  9  | Verify "Test.allTheThings() T-Shirt" listed|                         | Product name visible with price $15.99
+ 10  | Verify each product has an "Add to cart" button |                    | All 6 products show "Add to cart" button
+ 11  | Take a screenshot of the full products page |                        | Screenshot captured
+
+==============================================================================
+SCENARIO 3B: Sort Products by Price (Low to High)
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login and navigate to products page       | standard_user / secret_sauce | Products page loaded
+  2  | Click the sort dropdown                   |                         | Dropdown opens showing sort options
+  3  | Select "Price (low to high)"              | lohi                    | Products reorder with cheapest first
+  4  | Verify first product is "Sauce Labs Onesie" ($7.99) |               | First product in the list is the Onesie at $7.99
+  5  | Verify last product is "Sauce Labs Fleece Jacket" ($49.99) |         | Last product is the Fleece Jacket at $49.99
+  6  | Take a screenshot                         |                         | Screenshot captured
+
+==============================================================================
+SCENARIO 3C: Sort Products by Price (High to Low)
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login and navigate to products page       | standard_user / secret_sauce | Products page loaded
+  2  | Select "Price (high to low)" from sort    | hilo                    | Products reorder with most expensive first
+  3  | Verify first product is "Sauce Labs Fleece Jacket" ($49.99) |        | Fleece Jacket appears first
+  4  | Verify last product is "Sauce Labs Onesie" ($7.99) |                 | Onesie appears last
+
+==============================================================================
+SCENARIO 3D: Sort Products by Name (Z to A)
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login and navigate to products page       | standard_user / secret_sauce | Products page loaded
+  2  | Select "Name (Z to A)" from sort          | za                      | Products reorder alphabetically descending
+  3  | Verify first product starts with "T"      |                         | "Test.allTheThings() T-Shirt" appears first
+  4  | Verify last product starts with "S"       |                         | "Sauce Labs Backpack" appears last
+
+==============================================================================
+SCENARIO 3E: View Product Details
+==============================================================================
+STEPS:
+Step | Action                                    | Input Data              | Expected Result
+  1  | Login and navigate to products page       | standard_user / secret_sauce | Products page loaded
+  2  | Click on "Sauce Labs Backpack" product name |                        | Product detail page opens
+  3  | Verify product name is displayed          |                         | "Sauce Labs Backpack" heading visible
+  4  | Verify product description is displayed   |                         | Product description text is present
+  5  | Verify product price shows $29.99         |                         | Price "$29.99" is visible
+  6  | Verify product image is displayed         |                         | Product image is loaded and visible
+  7  | Verify "Add to cart" button is present    |                         | "Add to cart" button visible
+  8  | Verify "Back to products" link is present |                         | Back navigation button visible
+  9  | Click "Back to products"                  |                         | Returns to the products listing page
+ 10  | Verify all products are still visible     |                         | 6 products displayed
